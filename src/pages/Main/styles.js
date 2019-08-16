@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Menu = styled.div`
   display: flex;
   height: calc(100vh - 1rem);
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 

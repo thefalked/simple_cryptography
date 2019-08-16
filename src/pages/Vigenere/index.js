@@ -7,7 +7,7 @@ import { TextArea, Submit, Switch, Output, Flex, Chave } from "./styles";
 export default class Ceasar extends Component {
   state = {
     cript: true,
-    key: 1,
+    key: "",
     textInput: "",
     textOutput: ""
   };
@@ -22,15 +22,21 @@ export default class Ceasar extends Component {
   };
 
   handleChangeKey = event => {
-    this.setState({ key: parseInt(event.target.value) });
+    this.setState({ key: event.target.value });
   };
 
   encript = (alfabeto, input, chave) => {
     return input
       .split("")
-      .map(letra =>
+      .map((letra, indice) =>
         letra !== " " && isNaN(letra)
-          ? alfabeto[(alfabeto.indexOf(letra) + chave) % 26]
+          ? alfabeto[
+              (alfabeto.indexOf(letra) +
+                alfabeto.indexOf(
+                  chave.split("")[indice % chave.split("").length]
+                )) %
+                26
+            ]
           : letra
       )
       .join("");
@@ -39,9 +45,17 @@ export default class Ceasar extends Component {
   decrypt = (alfabeto, input, chave) => {
     return input
       .split("")
-      .map(letra =>
+      .map((letra, indice) =>
         letra !== " " && isNaN(letra)
-          ? alfabeto[(((alfabeto.indexOf(letra) - chave) % 26) + 26) % 26]
+          ? alfabeto[
+              (((alfabeto.indexOf(letra) -
+                alfabeto.indexOf(
+                  chave.split("")[indice % chave.split("").length]
+                )) %
+                26) +
+                26) %
+                26
+            ]
           : letra
       )
       .join("");
@@ -67,7 +81,7 @@ export default class Ceasar extends Component {
     return (
       <Container>
         <Flex>
-          <h1>Cifra de Cezar</h1>
+          <h1>Cifra de Vigenère</h1>
           <TextArea value={textInput} onChange={this.handleChangeTextInput} />
           <Switch>
             <label className="switchContainer">
@@ -81,8 +95,8 @@ export default class Ceasar extends Component {
             </label>
           </Switch>
           <Chave>
-            <input type="number" value={key} onChange={this.handleChangeKey} />
             <p>Valor da chave</p>
+            <input type="text" value={key} onChange={this.handleChangeKey} />
           </Chave>
           <Submit onClick={this.handleSubmit}>
             {cript ? "Criptografar" : "Descriptografar"}

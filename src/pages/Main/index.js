@@ -14,6 +14,16 @@ export default class Main extends Component {
               <span>Cifra de César</span>
             </Button>
           </Link>
+          <Link to={"vigenere"}>
+            <Button>
+              <span>Cifra de Vigenere</span>
+            </Button>
+          </Link>
+          <Link to={"transposition"}>
+            <Button>
+              <span>Cifra de Transposição</span>
+            </Button>
+          </Link>
         </Menu>
       </Container>
     );
