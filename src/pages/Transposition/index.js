@@ -25,54 +25,87 @@ export default class Ceasar extends Component {
     this.setState({ key: event.target.value });
   };
 
-  encript = (alfabeto, input, chave) => {
-    return input
+  keyToEncript = chave => {
+    return chave
+      .toLowerCase()
       .split("")
-      .map((letra, indice) =>
-        letra !== " " && isNaN(letra)
-          ? alfabeto[
-              (alfabeto.indexOf(letra) +
-                alfabeto.indexOf(
-                  chave.split("")[indice % chave.split("").length]
-                )) %
-                26
-            ]
-          : letra
-      )
+      .map((letra, indice) => {
+        return { letra, pos: indice };
+      })
+      .sort((a, b) => a.letra.localeCompare(b.letra));
+  };
+
+  keyToDecript = chave => {
+    return chave
+      .toLowerCase()
+      .split("")
+      .map((letra, indice) => {
+        return { letra, pos: indice };
+      })
+      .sort((a, b) => a.letra.localeCompare(b.letra))
+      .map((obj, indice) => {
+        return { ...obj, posOrdenada: indice };
+      })
+      .sort((a, b) => a.pos - b.pos);
+  };
+
+  inputToSizeKey = (input, chave) => {
+    const alfabeto = "abcdefghijklmnopqrstuvwxyz";
+
+    while (!Number.isInteger(input.length / chave.length)) {
+      input += alfabeto[Math.floor(Math.random() * 25 + 0)];
+    }
+    return input;
+  };
+
+  encript = (input, chave) => {
+    return chave
+      .map(obj => {
+        let texto = "",
+          index = 0;
+
+        while (obj.pos + chave.length * index <= input.length - 1) {
+          texto += input[obj.pos + chave.length * index];
+          index++;
+        }
+
+        return texto;
+      })
       .join("");
   };
 
-  decrypt = (alfabeto, input, chave) => {
-    return input
-      .split("")
-      .map((letra, indice) =>
-        letra !== " " && isNaN(letra)
-          ? alfabeto[
-              (((alfabeto.indexOf(letra) -
-                alfabeto.indexOf(
-                  chave.split("")[indice % chave.split("").length]
-                )) %
-                26) +
-                26) %
-                26
-            ]
-          : letra
-      )
+  returnText = (input, chave, index, texto) => {
+    return chave
+      .map(obj => (texto = input[obj.posOrdenada * chave.length + index]))
       .join("");
+  };
+
+  decrypt = (input, chave) => {
+    let texto = "";
+    for (let index = 0; index < input.length / chave.length; index++) {
+      texto += this.returnText(input, chave, index, texto);
+    }
+    return texto;
   };
 
   handleSubmit = async () => {
     const { cript, textInput, key } = this.state;
 
-    const alfabeto = "abcdefghijklmnopqrstuvwxyz";
+    const input = this.inputToSizeKey(
+      textInput
+        .toLowerCase()
+        .split(" ")
+        .join(""),
+      key
+    );
 
     if (cript)
       this.setState({
-        textOutput: await this.encript(alfabeto, textInput.toLowerCase(), key)
+        textOutput: await this.encript(input, this.keyToEncript(key))
       });
     else
       this.setState({
-        textOutput: await this.decrypt(alfabeto, textInput.toLowerCase(), key)
+        textOutput: await this.decrypt(input, this.keyToDecript(key))
       });
   };
 
@@ -81,7 +114,7 @@ export default class Ceasar extends Component {
     return (
       <Container>
         <Flex>
-          <h1>Cifra de Vigenère</h1>
+          <h1>Cifra de Transposição</h1>
           <TextArea value={textInput} onChange={this.handleChangeTextInput} />
           <Switch>
             <label className="switchContainer">

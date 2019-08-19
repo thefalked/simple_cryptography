@@ -81,7 +81,7 @@ export default class Ceasar extends Component {
     return (
       <Container>
         <Flex>
-          <h1>Cifra de Vigenère</h1>
+          <h1>Cifra de Vigenere</h1>
           <TextArea value={textInput} onChange={this.handleChangeTextInput} />
           <Switch>
             <label className="switchContainer">
