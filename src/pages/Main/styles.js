@@ -1,10 +1,19 @@
 import styled from "styled-components";
 
+export const MainContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+`;
+
 export const Menu = styled.div`
   display: flex;
-  height: calc(100vh - 1rem);
+  flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  width: 100%;
 `;
 
 export const Button = styled.button`
@@ -13,6 +22,7 @@ export const Button = styled.button`
   background: #ffd700;
   border: 0;
   border-radius: 0.25rem;
+  margin-top: 2rem;
 
   span {
     font-weight: bold;
@@ -23,5 +33,3 @@ export const Button = styled.button`
     opacity: 0.7;
   }
 `;
-
-export const CardMenuImage = styled.div``;

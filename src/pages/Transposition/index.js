@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import Container from "../../components/Container";
+import BackButton from "../../components/BackButton";
 
 import { TextArea, Submit, Switch, Output, Flex, Chave } from "./styles";
 
@@ -136,6 +137,7 @@ export default class Ceasar extends Component {
           </Submit>
           <Output value={textOutput} />
         </Flex>
+        <BackButton />
       </Container>
     );
   }
